@@ -5,18 +5,15 @@ import gfx.Assets;
 
 public abstract class Projectile extends Entity {
 
-    protected final int xOrigin, yOrigin;
     protected double angle;
     protected double nx, ny;
     protected double speed, rateOfFire, range, damage;
 
-    public Projectile(int x, int y, int dir) {
-        super(x, y, dir);
-        xOrigin = x;
-        yOrigin = y;
+    public Projectile(Handler handler, float x, float y, int width, int height) {
+        super(handler, x, y, width, height);
+        this.x = x+20;
+        this.y = y+20;
         angle = dir;
-        this.x = x;
-        this.y = y;
     }
 
     protected void move(){

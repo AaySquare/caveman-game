@@ -22,6 +22,7 @@ public class GameWorld {
     public GameWorld(Handler handler, String path) {
         this.handler = handler;
         entityManager = new EntityManager(handler, new Player(handler, 100, 100));
+        entityManager.addEntity(new Tree(handler, 450, 350));
 
         loadWorld(path);
 
@@ -31,6 +32,7 @@ public class GameWorld {
 
     public void update() {
         entityManager.update();
+
     }
 
     public void render(Graphics g) {

@@ -14,7 +14,6 @@ public abstract class Creature extends Entity {
     public static final float DEFAULT_SPEED = 2.5f;
     public static final int DEFAULT_CREATURE_WIDTH = 50, DEFAULT_CREATURE_HEIGHT = 50;
 
-
     protected int health;
     private float speed;
     protected float xMove, yMove;
@@ -30,11 +29,6 @@ public abstract class Creature extends Entity {
     }
 
     public void move(){
-        if (xMove > 0) dir = 1;
-        if (xMove < 0) dir = 3;
-        if (yMove > 0) dir = 2;
-        if (yMove < 0) dir = 0;
-
         if (!collision(0, (int) yMove) && !checkEntityCollisions(0, yMove)){
             y += yMove;
         }
@@ -47,7 +41,7 @@ public abstract class Creature extends Entity {
     protected void shoot(int x, int y, double dir){
         //dir *= 180 / Math.PI;
         //System.out.println("Angle: " + dir);
-        Projectile p = new SpearProjectile(x, y, (int) dir);
+        Projectile p = new SpearProjectile(handler, x, y, height, width);
         projectiles.add(p);
         handler.getGameWorld().add(p);
     }

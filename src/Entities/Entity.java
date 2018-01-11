@@ -21,12 +21,6 @@ public abstract class Entity {
         collider = new Rectangle(0, 0, width, height);
     }
 
-    public Entity(float x, float y, int dir) {
-        this.x = x;
-        this.y = y;
-        this.dir = dir;
-    }
-
     public abstract void update();
     public abstract void render(Graphics g);
 

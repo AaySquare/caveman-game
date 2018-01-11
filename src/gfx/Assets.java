@@ -4,7 +4,7 @@ import java.awt.image.BufferedImage;
 
 public class Assets {
 
-    public static BufferedImage dirt, grass, rock, tree;
+    public static BufferedImage dirt, grass, rock, tree, spear;
     public static BufferedImage[] player_down, player_up, player_left, player_right, player_idle;
 
     private static final int width = 32, height = 32;
@@ -15,6 +15,7 @@ public class Assets {
         /*SpriteSheet playerSheetLeft = new SpriteSheet(ImageLoader.loadImage("/Textures/caveman.png"));
         SpriteSheet playerSheetRight = new SpriteSheet(ImageLoader.loadImage("/Textures/caveman fliped.png"));*/
         SpriteSheet caveman = new SpriteSheet(ImageLoader.loadImage("/Textures/charactersSheet.png"));
+        SpriteSheet spears = new SpriteSheet(ImageLoader.loadImage("/Textures/sheet.png"));
 
         player_left = new BufferedImage[2];
         player_right = new BufferedImage[2];
@@ -53,5 +54,6 @@ public class Assets {
         grass = sheet.crop(width*2, 0, width, height);
         rock = sheet.crop(width*3, 0, width, height);
         tree = sheet.crop(width*2, height, width, height);
+        spear = sheet.crop(width*3, height, width, height*2);
     }
 }

@@ -1,15 +1,17 @@
 package Entities;
 
+import TileGame.Handler;
 import gfx.Assets;
 
 import java.awt.*;
 
 public class SpearProjectile extends Projectile {
 
-    public SpearProjectile(int x, int y, int dir){
-        super(x, y, dir);
+
+    public SpearProjectile(Handler handler, float x, float y, int width, int height) {
+        super(handler, x, y, width, height);
         range = 200;
-        speed = 4;
+        speed = 5;
         damage = 20;
         rateOfFire = 15;
 
@@ -24,11 +26,11 @@ public class SpearProjectile extends Projectile {
 
     protected void move(){
         x += nx;
-        y += nx;
+        y += ny;
     }
 
     @Override
     public void render(Graphics g) {
-        g.drawImage(gfx.Assets.tree, (int) (x - handler.getGameCamera().getxOffset()), (int)(y - handler.getGameCamera().getyOffset()), width, height, null);
+        g.drawImage(Assets.spear, (int) (x - handler.getGameCamera().getxOffset()), (int)(y - handler.getGameCamera().getyOffset()), width, height, null);
     }
 }

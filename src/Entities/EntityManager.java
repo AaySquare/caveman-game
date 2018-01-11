@@ -29,7 +29,6 @@ public class EntityManager {
     public void render(Graphics g){
         for (Entity e : entities){
             e.render(g);
-            System.out.println(entities.size());
         }
         player.render(g);
     }
