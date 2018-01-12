@@ -1,16 +1,19 @@
 package Entities;
 
+import Entities.Weapons.Projectile;
 import TileGame.Handler;
 import Entities.Creatures.Player;
 
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.List;
 
 public class EntityManager {
 
     private Handler handler;
     private Player player;
     private ArrayList<Entity> entities;
+    public ArrayList<Projectile> projectiles = new ArrayList<Projectile>();
 
     public EntityManager(Handler handler, Player player){
         this.handler = handler;
@@ -31,6 +34,10 @@ public class EntityManager {
             e.render(g);
         }
         player.render(g);
+    }
+
+    public ArrayList<Projectile> getProjectiles() {
+        return projectiles;
     }
 
     public ArrayList<Entity> getEntities() {

@@ -1,5 +1,6 @@
 package Entities;
 
+import Inputs.Mouse;
 import TileGame.Handler;
 
 import java.awt.*;
@@ -8,9 +9,10 @@ public abstract class Entity {
 
     protected Handler handler;
     protected float x, y;
-    protected int dir;
+    protected double direction;
     protected int width, height;
     protected Rectangle collider;
+    private boolean removed = false;
 
     public Entity(Handler handler, float x, float y, int width, int height){
         this.handler = handler;
@@ -18,6 +20,9 @@ public abstract class Entity {
         this.y = y;
         this.width = width;
         this.height = height;
+        double dx = Mouse.getMouseX() - handler.getWidth()/2;
+        double dy = Mouse.getMouseY() - handler.getHeight()/2;
+        direction = Math.atan2(dy, dx);
         collider = new Rectangle(0, 0, width, height);
     }
 
@@ -36,6 +41,14 @@ public abstract class Entity {
 
     public Rectangle getCollisionBounds(float xOffset, float yOffset){
         return new Rectangle((int) (x + collider.x + xOffset), (int) (y + collider.y + yOffset), collider.width, collider.height);
+    }
+
+    public void remove(){
+        removed = true;
+    }
+
+    public boolean isRemoved(){
+        return removed;
     }
 
     public float getX() {

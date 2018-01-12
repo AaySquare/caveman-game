@@ -1,4 +1,4 @@
-package Entities;
+package Entities.Static;
 
 import Entities.Entity;
 import TileGame.Handler;

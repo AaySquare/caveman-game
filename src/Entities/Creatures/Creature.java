@@ -1,12 +1,10 @@
 package Entities.Creatures;
 
 import Entities.Entity;
-import Entities.Projectile;
-import Entities.SpearProjectile;
+import Entities.Weapons.ArrowProjectile;
+import Entities.Weapons.Projectile;
+import Entities.Weapons.SpearProjectile;
 import TileGame.Handler;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public abstract class Creature extends Entity {
 
@@ -17,8 +15,6 @@ public abstract class Creature extends Entity {
     protected int health;
     private float speed;
     protected float xMove, yMove;
-    protected int dir = -1;
-    protected List<Projectile> projectiles = new ArrayList<Projectile>();
 
     public Creature(Handler handler, float x, float y, int width, int height) {
         super(handler, x, y, width, height);
@@ -38,12 +34,20 @@ public abstract class Creature extends Entity {
         }
     }
 
-    protected void shoot(int x, int y, double dir){
-        //dir *= 180 / Math.PI;
-        //System.out.println("Angle: " + dir);
-        Projectile p = new SpearProjectile(handler, x, y, height, width);
-        projectiles.add(p);
-        handler.getGameWorld().add(p);
+    protected void shootSpear(int x, int y, double dir){
+        /*direction *= 180 / Math.PI;
+        System.out.println("Angle: " + direction);*/
+        Projectile spear = new SpearProjectile(handler, x, y, height, width);
+        handler.getGameWorld().getEntityManager().projectiles.add(spear);
+        handler.getGameWorld().add(spear);
+    }
+
+    protected void shootArrow(int x, int y, double dir){
+        /*direction *= 180 / Math.PI;
+        System.out.println("Angle: " + direction);*/
+        Projectile arrow = new ArrowProjectile(handler, x, y, height, width);
+        handler.getGameWorld().getEntityManager().projectiles.add(arrow);
+        handler.getGameWorld().add(arrow);
     }
 
     protected boolean collision(int xMove, int yMove){

@@ -1,6 +1,5 @@
 package Entities.Static;
 
-import Entities.StaticEntity;
 import TileGame.Handler;
 import Tiles.Tile;
 
