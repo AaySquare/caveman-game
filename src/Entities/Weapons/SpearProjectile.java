@@ -7,7 +7,7 @@ import java.awt.*;
 
 public class SpearProjectile extends Projectile {
 
-    public static final int SPEAR_FIRE_RATE = 20;
+    public static final int SPEAR_FIRE_RATE = 100;
     public static int numberOfSpears = 3;
 
     public SpearProjectile(Handler handler, float x, float y, int width, int height) {

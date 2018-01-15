@@ -1,6 +1,7 @@
 package Entities.Weapons;
 
 import TileGame.Handler;
+import gfx.Assets;
 
 import java.awt.*;
 
@@ -39,6 +40,6 @@ public class ArrowProjectile extends Projectile {
 
     @Override
     public void render(Graphics g) {
-        g.drawImage(gfx.Assets.tree, (int) (x - handler.getGameCamera().getxOffset()), (int)(y - handler.getGameCamera().getyOffset()), width, height, null);
+        g.drawImage(Assets.arrow, (int) (x - handler.getGameCamera().getxOffset()), (int)(y - handler.getGameCamera().getyOffset()), width, height, null);
     }
 }

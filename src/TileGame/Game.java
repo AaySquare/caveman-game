@@ -12,6 +12,9 @@ import gfx.Camera;
 import java.awt.*;
 import java.awt.image.BufferStrategy;
 
+import static Entities.Weapons.SpearProjectile.numberOfSpears;
+import static Entities.Weapons.ArrowProjectile.numberOfArrows;
+
 public class Game implements Runnable {
 
     private Display display;
@@ -83,10 +86,10 @@ public class Game implements Runnable {
         }
 
         g.setColor(Color.white);
+        g.setFont(new Font("Calibri", 0, 20));
         //g.fillRect(Mouse.getMouseX() - 32, Mouse.getMouseY() - 32, 64, 64);
-        /*if (Mouse.getMouseB() != -1){
-            g.drawString("Button: " + Mouse.getMouseB(), 80, 80);
-        }*/
+        g.drawString("Spears count: " + numberOfSpears, 0, 50);
+        g.drawString("Arrows count: " + numberOfArrows, 0, 80);
 
         bs.show();
         g.dispose();
