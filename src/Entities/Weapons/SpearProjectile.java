@@ -12,7 +12,7 @@ public class SpearProjectile extends Projectile {
 
     public SpearProjectile(Handler handler, float x, float y, int width, int height) {
         super(handler, x, y, width, height);
-        range = 20;
+        range = 300;
         speed = 5;
         damage = 50;
 
@@ -23,6 +23,7 @@ public class SpearProjectile extends Projectile {
     protected void move(){
         x += nx;
         y += ny;
+
         if (distance() > range){
             remove();
         }
@@ -35,6 +36,9 @@ public class SpearProjectile extends Projectile {
 
     @Override
     public void update() {
+        if (handler.getGameWorld().tileCollision(x, y, nx, ny, 32)){
+            remove();
+        }
         move();
     }
 

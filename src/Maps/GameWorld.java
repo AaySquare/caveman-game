@@ -4,6 +4,8 @@ import Entities.Creatures.Player;
 import Entities.Entity;
 import Entities.EntityManager;
 import Entities.Static.Tree;
+import Entities.Weapons.Projectile;
+import Entities.Weapons.SpearProjectile;
 import TileGame.Handler;
 import Tiles.Tile;
 import Utilities.LoadFile;
@@ -23,6 +25,10 @@ public class GameWorld {
         this.handler = handler;
         entityManager = new EntityManager(handler, new Player(handler, 100, 100));
         entityManager.addEntity(new Tree(handler, 450, 350));
+        entityManager.addEntity(new Tree(handler, 700, 500));
+        entityManager.addEntity(new Tree(handler, 800, 650));
+        entityManager.addEntity(new Tree(handler, 700, 300));
+        entityManager.addEntity(new Tree(handler, 600, 650));
 
         loadWorld(path);
 
@@ -33,6 +39,18 @@ public class GameWorld {
     public void update() {
         entityManager.update();
 
+    }
+
+    public boolean tileCollision(double x, double y, double xMove, double yMove, int size){
+        boolean solid = false;
+        for (int c = 0; c < 4; c++){
+            double xtile = (int) (((x+xMove) + c % 2 * size) / 64);
+            double yTile = (int) (((y+yMove) + c / 2 * size / 10 + 5) / 64);
+            if (handler.getGameWorld().getTile((int)xtile, (int)yTile).isSolid()){
+                solid = true;
+            }
+        }
+        return solid;
     }
 
     public void render(Graphics g) {
@@ -53,6 +71,10 @@ public class GameWorld {
 
     public void add(Entity entity){
         entityManager.getEntities().add(entity);
+    }
+
+    public void addProjectiles(Projectile projectile){
+        entityManager.getProjectiles().add(projectile);
     }
 
     public Tile getTile(float x, float y){

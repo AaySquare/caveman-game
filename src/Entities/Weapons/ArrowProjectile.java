@@ -12,7 +12,7 @@ public class ArrowProjectile extends Projectile {
 
     public ArrowProjectile(Handler handler, float x, float y, int width, int height) {
         super(handler, x, y, width, height);
-        range = 50;
+        range = 450;
         speed = 10;
         damage = 20;
 
@@ -35,11 +35,14 @@ public class ArrowProjectile extends Projectile {
 
     @Override
     public void update() {
+        if (handler.getGameWorld().tileCollision(x, y, nx, ny, 32)){
+            remove();
+        }
         move();
     }
 
     @Override
     public void render(Graphics g) {
-        g.drawImage(Assets.arrow, (int) (x - handler.getGameCamera().getxOffset()), (int)(y - handler.getGameCamera().getyOffset()), width, height, null);
+        g.drawImage(Assets.arrow, (int) (x - handler.getGameCamera().getxOffset()), (int)(y - handler.getGameCamera().getyOffset()), (width/2)+12, (height/2)+12, null);
     }
 }

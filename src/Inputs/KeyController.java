@@ -7,6 +7,7 @@ public class KeyController implements KeyListener{
 
     private boolean[] keys;
     public boolean up, left, down, right;
+    public boolean meleeButton;
 
     public KeyController(){
         keys = new boolean[256];
@@ -17,6 +18,8 @@ public class KeyController implements KeyListener{
         down = keys[KeyEvent.VK_DOWN];
         left = keys[KeyEvent.VK_LEFT];
         right = keys[KeyEvent.VK_RIGHT];
+
+        meleeButton = keys[KeyEvent.VK_SPACE];
     }
 
     @Override

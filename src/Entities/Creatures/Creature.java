@@ -8,17 +8,14 @@ import TileGame.Handler;
 
 public abstract class Creature extends Entity {
 
-    public static final int DEFAULT_HEALTH = 10;
     public static final float DEFAULT_SPEED = 2.5f;
-    public static final int DEFAULT_CREATURE_WIDTH = 45, DEFAULT_CREATURE_HEIGHT = 45;
+    public static final int DEFAULT_CREATURE_WIDTH = 50, DEFAULT_CREATURE_HEIGHT = 45;
 
-    protected int health;
     private float speed;
     protected float xMove, yMove;
 
     public Creature(Handler handler, float x, float y, int width, int height) {
         super(handler, x, y, width, height);
-        health = DEFAULT_HEALTH;
         speed = DEFAULT_SPEED;
         xMove = 0;
         yMove = 0;
@@ -35,26 +32,20 @@ public abstract class Creature extends Entity {
     }
 
     protected void shootSpear(int x, int y, double dir){
-        /*direction *= 180 / Math.PI;
-        System.out.println("Angle: " + direction);*/
         Projectile spear = new SpearProjectile(handler, x, y, height, width);
-        handler.getGameWorld().getEntityManager().projectiles.add(spear);
-        handler.getGameWorld().add(spear);
+        handler.getGameWorld().addProjectiles(spear);
     }
 
-    protected void shootArrow(int x, int y, double dir){
-        /*direction *= 180 / Math.PI;
-        System.out.println("Angle: " + direction);*/
+   protected void shootArrow(int x, int y, double dir){
         Projectile arrow = new ArrowProjectile(handler, x, y, height, width);
-        handler.getGameWorld().getEntityManager().projectiles.add(arrow);
-        handler.getGameWorld().add(arrow);
+        handler.getGameWorld().addProjectiles(arrow);
     }
 
     protected boolean collision(int xMove, int yMove){
         boolean solid = false;
         for (int c = 0; c < 4; c++){
-            int xtile = (int) (((x+xMove) + c % 2 * 40 + 9) / 64);
-            int yTile = (int) (((y+yMove) + c / 2 * 25 + 30) / 64);
+            int xtile = (int) (((x+xMove) + c % 2 * 20 + 15) / 64);
+            int yTile = (int) (((y+yMove) + c / 2 * 20 + 31) / 64);
             if (handler.getGameWorld().getTile(xtile, yTile).isSolid()){
                 solid = true;
             }

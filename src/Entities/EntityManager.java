@@ -1,6 +1,7 @@
 package Entities;
 
 import Entities.Weapons.Projectile;
+import Entities.Weapons.SpearProjectile;
 import TileGame.Handler;
 import Entities.Creatures.Player;
 
@@ -12,35 +13,52 @@ public class EntityManager {
 
     private Handler handler;
     private Player player;
-    private ArrayList<Entity> entities;
-    public ArrayList<Projectile> projectiles = new ArrayList<Projectile>();
+    private List<Entity> entities;
+    public List<Projectile> projectiles;
 
     public EntityManager(Handler handler, Player player){
         this.handler = handler;
         this.player = player;
         entities = new ArrayList<>();
+        projectiles = new ArrayList<>();
     }
 
     public void update(){
         for (int i = 0; i < entities.size(); i++) {
             Entity e = entities.get(i);
             e.update();
+            if (e.isRemoved()){
+                entities.remove(e);
+            }
         }
+
+        for (int i = 0; i < projectiles.size(); i++) {
+            Entity e = projectiles.get(i);
+            e.update();
+        }
+
         player.update();
     }
 
     public void render(Graphics g){
-        for (Entity e : entities){
+        for (int i = 0; i < entities.size(); i++) {
+            Entity e = entities.get(i);
             e.render(g);
         }
+
+        for (int i = 0; i < projectiles.size(); i++) {
+            Entity e = projectiles.get(i);
+            e.render(g);
+        }
+
         player.render(g);
     }
 
-    public ArrayList<Projectile> getProjectiles() {
+    public List<Projectile> getProjectiles() {
         return projectiles;
     }
 
-    public ArrayList<Entity> getEntities() {
+    public List<Entity> getEntities() {
         return entities;
     }
 

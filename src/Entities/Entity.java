@@ -7,6 +7,8 @@ import java.awt.*;
 
 public abstract class Entity {
 
+    public static final int DEFAULT_HEALTH = 10;
+    protected int health;
     protected Handler handler;
     protected float x, y;
     protected double direction;
@@ -20,6 +22,7 @@ public abstract class Entity {
         this.y = y;
         this.width = width;
         this.height = height;
+        health = DEFAULT_HEALTH;
         double dx = Mouse.getMouseX() - handler.getWidth()/2;
         double dy = Mouse.getMouseY() - handler.getHeight()/2;
         direction = Math.atan2(dy, dx);
@@ -29,6 +32,15 @@ public abstract class Entity {
     public abstract void update();
     public abstract void render(Graphics g);
 
+
+    public void damage(int amount){
+        health -= amount;
+        System.out.println(health);
+        if (health <= 0){
+            remove();
+        }
+    }
+
     public boolean checkEntityCollisions(float xOffset, float yOffset){
         for(Entity e : handler.getGameWorld().getEntityManager().getEntities()){
             if(e.equals(this))
@@ -36,6 +48,7 @@ public abstract class Entity {
             if(e.getCollisionBounds(0f, 0f).intersects(getCollisionBounds(xOffset, yOffset)))
                 return true;
         }
+
         return false;
     }
 
