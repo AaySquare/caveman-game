@@ -7,8 +7,8 @@ import java.awt.*;
 
 public abstract class Entity {
 
-    public static final int DEFAULT_HEALTH = 10;
-    protected int health;
+    protected int treeHealth = 20;
+    protected int foxHealth = 50;
     protected Handler handler;
     protected float x, y;
     protected double direction;
@@ -22,7 +22,7 @@ public abstract class Entity {
         this.y = y;
         this.width = width;
         this.height = height;
-        health = DEFAULT_HEALTH;
+
         double dx = Mouse.getMouseX() - handler.getWidth()/2;
         double dy = Mouse.getMouseY() - handler.getHeight()/2;
         direction = Math.atan2(dy, dx);
@@ -30,18 +30,29 @@ public abstract class Entity {
     }
 
     public abstract void update();
-    public abstract void render(Graphics g);
+    public abstract void render(Graphics2D g);
+    public abstract void die();
 
 
-    public void damage(int amount){
-        health -= amount;
-        System.out.println(health);
-        if (health <= 0){
+    public void damageTree(int amount){
+        treeHealth -= amount;
+        System.out.println("Health: " + treeHealth);
+        if (treeHealth <= 0){
+            die();
             remove();
         }
     }
 
-    public boolean checkEntityCollisions(float xOffset, float yOffset){
+    public void damageFox(int amount){
+        foxHealth -= amount;
+        System.out.println("Health: " + foxHealth);
+        if (foxHealth <= 0){
+            die();
+            remove();
+        }
+    }
+
+    public boolean EntityCollision(float xOffset, float yOffset){
         for(Entity e : handler.getGameWorld().getEntityManager().getEntities()){
             if(e.equals(this))
                 continue;

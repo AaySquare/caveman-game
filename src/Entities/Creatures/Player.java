@@ -1,47 +1,60 @@
 package Entities.Creatures;
 
 import Entities.Entity;
+import Entities.Static.Tree;
 import Entities.Weapons.ArrowProjectile;
 import Entities.Weapons.Projectile;
 import Entities.Weapons.SpearProjectile;
 import Inputs.Mouse;
+import Inventory.Inventory;
 import TileGame.Handler;
+import gfx.Animation;
 import gfx.Assets;
 
 import java.awt.*;
 import java.awt.image.BufferedImage;
 
+import static Entities.Weapons.Projectile.angle;
 import static Entities.Weapons.SpearProjectile.numberOfSpears;
 import static Entities.Weapons.ArrowProjectile.numberOfArrows;
 
 public class Player extends Creature {
 
-    private gfx.Animation downAnim, upAnim, leftAnim, rightAnim, leftAttackAnim, rightAttackAnim, leftBowAnim, rightBowAnim;
-    private int speedAnim = 200;
+    public static final int DEFAULT_PLAYER_WIDTH = 50, DEFAULT_PLAYER_HEIGHT = 50;
+    private Animation downAnim, upAnim, leftAnim, rightAnim, leftAttackAnim, rightAttackAnim, leftBowAnim, rightBowAnim, rightThrow, leftThrow;
+    private int speedAnim = 150;
     private BufferedImage curPosition = Assets.player_down[0];
 
     private long lastAttackTimer, attackCooldown = 300, attackTimer = attackCooldown;
-    private int fireRate_spear = 0;
-    private int fireRate_arrow = 0;
+    private int meleeDamage = 2;
+    private int fireRate_spear;
+    private int fireRate_arrow;
+
+    private Inventory inventory;
 
     public Player(Handler handler, float x, float y) {
-        super(handler, x, y, Creature.DEFAULT_CREATURE_WIDTH, Creature.DEFAULT_CREATURE_HEIGHT);
-        downAnim = new gfx.Animation(speedAnim, gfx.Assets.player_down);
-        upAnim = new gfx.Animation(speedAnim, gfx.Assets.player_up);
-        leftAnim = new gfx.Animation(speedAnim, gfx.Assets.player_left);
-        rightAnim = new gfx.Animation(speedAnim, gfx.Assets.player_right);
-        leftAttackAnim = new gfx.Animation(speedAnim, Assets.player_attack_left);
-        rightAttackAnim = new gfx.Animation(speedAnim, Assets.player_attack_right);
-        leftBowAnim = new gfx.Animation(speedAnim, Assets.bow_arrow_left);
-        rightBowAnim = new gfx.Animation(speedAnim, Assets.bow_arrow_right);
+        super(handler, x, y, DEFAULT_PLAYER_WIDTH, DEFAULT_PLAYER_HEIGHT);
 
-        collider.x = 16;
-        collider.y = 32;
+        downAnim = new Animation(speedAnim, Assets.player_down);
+        upAnim = new Animation(speedAnim, Assets.player_up);
+        leftAnim = new Animation(speedAnim, Assets.player_left);
+        rightAnim = new Animation(speedAnim, Assets.player_right);
+        leftAttackAnim = new Animation(speedAnim, Assets.player_attack_left);
+        rightAttackAnim = new Animation(speedAnim, Assets.player_attack_right);
+        leftBowAnim = new Animation(speedAnim, Assets.bow_arrow_left);
+        rightBowAnim = new Animation(speedAnim, Assets.bow_arrow_right);
+        leftThrow = new Animation(speedAnim, Assets.player_throw_left);
+        rightThrow = new Animation(speedAnim, Assets.player_throw_right);
+
+        collider.x = 12;
+        collider.y = 33;
         collider.width = 16;
-        collider.height = 16;
+        collider.height = 19;
 
         fireRate_spear = SpearProjectile.SPEAR_FIRE_RATE;
         fireRate_arrow = ArrowProjectile.ARROW_FIRE_RATE;
+
+        inventory = new Inventory(handler);
     }
 
     @Override
@@ -62,13 +75,21 @@ public class Player extends Creature {
         rightAttackAnim.update();
         leftBowAnim.update();
         rightBowAnim.update();
+
+
         getInput();
         move();
         handler.getGameCamera().focusOnEntity(this);
         clear();
+
         //Attack
-        updateMelee();
+        if (xMove == 0 && yMove == 0){
+            meleeAttack();
+        }
+
         updateShoot();
+
+        inventory.update();
 
     }
 
@@ -81,7 +102,7 @@ public class Player extends Creature {
         }
     }
 
-    private void updateMelee(){
+    private void meleeAttack(){
         attackTimer += System.currentTimeMillis()  - lastAttackTimer;
         lastAttackTimer = System.currentTimeMillis();
         if (attackTimer < attackCooldown){
@@ -104,8 +125,12 @@ public class Player extends Creature {
         for(Entity e : handler.getGameWorld().getEntityManager().getEntities()){
             if(e.equals(this))
                 continue;
-            if(e.getCollisionBounds(0f, 0f).intersects(mRect)) {
-                e.damage(1);
+            if(e.getCollisionBounds(0f, 0f).intersects(mRect) && e instanceof Tree) {
+                e.damageTree(meleeDamage);
+                return;
+            }
+            if(e.getCollisionBounds(0f, 0f).intersects(mRect) && e instanceof AnimalTest) {
+                e.damageFox(meleeDamage);
                 return;
             }
         }
@@ -117,7 +142,7 @@ public class Player extends Creature {
             numberOfSpears--;
             fireRate_spear = SpearProjectile.SPEAR_FIRE_RATE;
         }
-        else if (Mouse.getMouseB() == 3 && fireRate_arrow <= 0 && numberOfArrows > 0){
+        else if (Mouse.getMouseB() == 3 && fireRate_arrow <= 0 && numberOfArrows > 0 && xMove == 0 && yMove == 0){
             shootArrow((int)x, (int)y, direction);
             numberOfArrows--;
             fireRate_arrow = ArrowProjectile.ARROW_FIRE_RATE;
@@ -129,39 +154,52 @@ public class Player extends Creature {
         yMove = 0;
 
         if (handler.getKeyController().up){
-            yMove = -getSpeed();
+            yMove = -getPlayerSpeed();
         }
         if (handler.getKeyController().down){
-            yMove = getSpeed();
+            yMove = getPlayerSpeed();
         }
         if (handler.getKeyController().left){
-            xMove = -getSpeed();
+            xMove = -getPlayerSpeed();
         }
         if (handler.getKeyController().right){
-            xMove = getSpeed();
+            xMove = getPlayerSpeed();
         }
 
         if (handler.getKeyController().right && handler.getKeyController().up){
-            xMove = (getSpeed()/2);
+            xMove = (getPlayerSpeed()/2);
         }
 
         if (handler.getKeyController().left && handler.getKeyController().down){
-            yMove = (getSpeed()/2);
+            yMove = (getPlayerSpeed()/2);
         }
 
         if (handler.getKeyController().right && handler.getKeyController().down){
-            yMove = (getSpeed()/2);
+            yMove = (getPlayerSpeed()/2);
         }
 
         if (handler.getKeyController().left && handler.getKeyController().up){
-            xMove = (-getSpeed()/2);
+            xMove = (-getPlayerSpeed()/2);
         }
 
     }
 
     @Override
-    public void render(Graphics g) {
+    public void render(Graphics2D g) {
         g.drawImage(getAnimationFrame(),(int) (x - handler.getGameCamera().getxOffset()), (int) (y - handler.getGameCamera().getyOffset()), width, height, null);
+        inventory.render(g);
+        /*g.setColor(Color.red);
+        g.fillRect((int)(x + collider.x - handler.getGameCamera().getxOffset()), (int)(y + collider.y - handler.getGameCamera().getyOffset()),
+                collider.width, collider.height);*/
+    }
+
+    @Override
+    public void die() {
+        System.out.println("You lose!");
+    }
+
+    public Inventory getInventory() {
+        return inventory;
     }
 
     private BufferedImage getAnimationFrame(){
@@ -190,13 +228,24 @@ public class Player extends Creature {
                 curPosition == Assets.player_up[0])){
             return rightAttackAnim.getFrames();
         }
-        else if ((Mouse.getMouseB() == 3) && (curPosition == Assets.player_idle_right[0] ||
-                curPosition == Assets.player_up[0])) {
+        else if ((Mouse.getMouseB() == 3) && (curPosition == Assets.player_idle_right[0] || curPosition == Assets.player_up[0])) {
+            curPosition = Assets.player_idle_right[0];
             return rightBowAnim.getFrames();
         }
-        else if ((Mouse.getMouseB() == 3) && (curPosition == Assets.player_idle_left[0] ||
-                curPosition == Assets.player_down[0])) {
+        else if ((Mouse.getMouseB() == 3) && (curPosition == Assets.player_idle_left[0] || curPosition == Assets.player_down[0])) {
+            curPosition = Assets.player_idle_left[0];
             return leftBowAnim.getFrames();
+        }
+
+        if (numberOfSpears > 0){
+            if ((Mouse.getMouseB() == 1) && (curPosition == Assets.player_idle_right[0] ||
+                    curPosition == Assets.player_up[0])) {
+                return rightThrow.getFrames();
+            }
+            if ((Mouse.getMouseB() == 1) && (curPosition == Assets.player_idle_left[0] ||
+                    curPosition == Assets.player_down[0])) {
+                return leftThrow.getFrames();
+            }
         }
 
         return curPosition;

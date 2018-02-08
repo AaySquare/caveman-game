@@ -82,7 +82,7 @@ public class Game implements Runnable {
         g.clearRect(0, 0, width, height);
 
         if (State.getState() != null){
-            State.getState().render(g);
+            State.getState().render((Graphics2D) g);
         }
 
         g.setColor(Color.white);
