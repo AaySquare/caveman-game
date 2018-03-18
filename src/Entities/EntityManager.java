@@ -1,10 +1,9 @@
 package Entities;
 
-import Entities.Creatures.AnimalTest;
 import Entities.Weapons.Projectile;
-import Entities.Weapons.SpearProjectile;
 import TileGame.Handler;
 import Entities.Creatures.Player;
+import Tiles.WaterTile;
 
 import java.awt.*;
 import java.util.ArrayList;
@@ -51,6 +50,7 @@ public class EntityManager {
             }
         }
 
+
         entities.sort(renderOrder);
     }
 
@@ -64,6 +64,7 @@ public class EntityManager {
             Entity e = entities.get(i);
             e.render(g);
         }
+        player.postRender(g);
     }
 
     public ArrayList<Projectile> getProjectiles() {
@@ -75,11 +76,41 @@ public class EntityManager {
 
     }
 
+    public List<Entity> getEntities(Entity e, int radius){
+        List<Entity> result = new ArrayList<>();
+        float ex = e.getX();
+        float ey = e.getY();
+        for (int i = 0; i < entities.size(); i++){
+            Entity entity = entities.get(i);
+            float x = entity.getX();
+            float y = entity.getY();
+            float dx = Math.abs(x - ex);
+            float dy = Math.abs(y - ey);
+            double distance = Math.sqrt((dx*dx) + (dy * dy));
+            if (distance <= radius){
+                result.add(entity);
+            }
+        }
+        return result;
+    }
+
     public void addEntity(Entity e){
         entities.add(e);
     }
 
     public Player getPlayer() {
         return player;
+    }
+
+    public List<Player> getPlayers(Entity e, int radius){
+        List<Entity> entities = getEntities(e, radius);
+        List<Player> result = new ArrayList<>();
+
+        for (int i = 0; i < entities.size(); i++) {
+            if (entities.get(i) instanceof Player) {
+                result.add((Player) entities.get(i));
+            }
+        }
+        return result;
     }
 }

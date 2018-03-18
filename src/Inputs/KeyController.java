@@ -2,6 +2,7 @@ package Inputs;
 
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
+import Inventory.Inventory;
 
 public class KeyController implements KeyListener{
 
@@ -53,6 +54,14 @@ public class KeyController implements KeyListener{
         if(e.getKeyCode() < 0 || e.getKeyCode() >= keys.length)
             return;
         keys[e.getKeyCode()] = true;
+
+        if(e.getKeyCode() == KeyEvent.VK_I) {
+            if(!Inventory.isOpen) {
+                Inventory.isOpen = true;
+            } else {
+                Inventory.isOpen = false;
+            }
+        }
     }
 
     @Override

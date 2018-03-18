@@ -1,7 +1,6 @@
 package Entities.Creatures;
 
 import Entities.Entity;
-import Entities.Static.Tree;
 import Entities.Weapons.ArrowProjectile;
 import Entities.Weapons.Projectile;
 import Entities.Weapons.SpearProjectile;
@@ -14,15 +13,17 @@ public abstract class Creature extends Entity {
     public static final int DEFAULT_CREATURE_WIDTH = 45, DEFAULT_CREATURE_HEIGHT = 45;
 
     private float playerSpeed;
-    private float animalSpeed;
+    private float foxSpeed;
+    private float tigerSpeed;
     protected float xMove, yMove;
 
     public Creature(Handler handler, float x, float y, int width, int height) {
         super(handler, x, y, width, height);
         playerSpeed = DEFAULT_SPEED_PLAYER;
-        animalSpeed = DEFAULT_SPEED_ANIMAL;
-        xMove = 1;
-        yMove = 1;
+        foxSpeed = DEFAULT_SPEED_ANIMAL;
+        tigerSpeed = DEFAULT_SPEED_ANIMAL;
+        xMove = 0;
+        yMove = 0;
     }
 
     public void move(){
@@ -84,11 +85,19 @@ public abstract class Creature extends Entity {
         this.playerSpeed = playerSpeed;
     }
 
-    public float getAnimalSpeed() {
-        return animalSpeed;
+    public float getFoxSpeed() {
+        return foxSpeed;
     }
 
-    public void setAnimalSpeed(float animalSpeed) {
-        this.animalSpeed = animalSpeed;
+    public void setFoxSpeed(float foxSpeed) {
+        this.foxSpeed = foxSpeed;
+    }
+
+    public float getTigerSpeed() {
+        return tigerSpeed;
+    }
+
+    public void setTigerSpeed(float tigerSpeed) {
+        this.tigerSpeed = tigerSpeed;
     }
 }

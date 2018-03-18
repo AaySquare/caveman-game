@@ -4,42 +4,32 @@ import java.awt.image.BufferedImage;
 
 public class Assets {
 
-    public static BufferedImage dirt, grass, rock, tree, spear, arrow, wood, meat;
+    public static BufferedImage tree, spear, arrow, wood, meat;
     public static BufferedImage[]
             //Player movement sprites
             player_down, player_up, player_left, player_right, player_idle_left, player_idle_right,
             //Player attack sprites
             player_attack_right, player_attack_left, bow_arrow_right, bow_arrow_left, player_throw_right, player_throw_left,
             //Fox movement sprites
-            fox_down, fox_up, fox_left, fox_right;
+            fox_down, fox_up, fox_left, fox_right,
+            //Tiger movement sprites
+            tiger_down, tiger_up, tiger_left, tiger_right,
+            //Tiles animaion
+            dirt, grass, rock, water, waterfall, waterSplash, waterShadow, platform,
+            //UI
+            start_button;
 
     private static final int width = 32, height = 32;
-    private static final int foxWidth = 48, foxHeight = 48;
+    private static final int animalWidth = 48, animalHeight = 48;
 
     public static void init(){
 
         SpriteSheet sheet = new SpriteSheet(ImageLoader.loadImage("/Textures/sheet.png"));
-        /*SpriteSheet playerSheetLeft = new SpriteSheet(ImageLoader.loadImage("/Textures/caveman.png"));
-        SpriteSheet playerSheetRight = new SpriteSheet(ImageLoader.loadImage("/Textures/caveman fliped.png"));*/
         SpriteSheet cavemanRight = new SpriteSheet(ImageLoader.loadImage("/Textures/spr_caveman v2.png"));
         SpriteSheet cavemanLeft = new SpriteSheet(ImageLoader.loadImage("/Textures/spr_caveman_flip v2.png"));
         SpriteSheet foxSheet = new SpriteSheet(ImageLoader.loadImage("/Textures/Foxes.png"));
-
-        //For old Caveman sprite
-        /*player_left = new BufferedImage[2];
-        player_right = new BufferedImage[2];
-        player_idle = new BufferedImage[1];
-
-        player_down = player_left;
-        player_up = player_right;
-
-        player_idle[0] = caveman.crop(width*5, 0, width*2, height*2);
-
-        player_left[0] = caveman.crop(width*3, 0, width*2, height*2);
-        player_left[1] = caveman.crop(width, 0, width*2, height*2);
-
-        player_right[0] = caveman.crop((width*7)+12, 0, width*2, height*2);
-        player_right[1] = caveman.crop((width*9)+12, 0, width*2, height*2);*/
+        SpriteSheet tigerSheet = new SpriteSheet(ImageLoader.loadImage("/Textures/Tigers.png"));
+        SpriteSheet startButtons = new SpriteSheet(ImageLoader.loadImage("/UI/button-start.png"));
 
         //Sprite initialisation for animation
         player_right = new BufferedImage[7];
@@ -59,6 +49,26 @@ public class Assets {
         fox_down = new BufferedImage[3];
         fox_left = new BufferedImage[3];
         fox_right = new BufferedImage[3];
+
+        tiger_up = new BufferedImage[3];
+        tiger_down = new BufferedImage[3];
+        tiger_left = new BufferedImage[3];
+        tiger_right = new BufferedImage[3];
+
+        water = new BufferedImage[2];
+        waterfall = new BufferedImage[2];
+        waterSplash = new BufferedImage[2];
+        waterShadow = new BufferedImage[2];
+        grass = new BufferedImage[1];
+        dirt = new BufferedImage[1];
+        rock = new BufferedImage[1];
+        platform = new BufferedImage[1];
+
+        start_button = new BufferedImage[2];
+
+        //UI
+        start_button[0] = startButtons.crop(0, 0, 401, 143);
+        start_button[1] = startButtons.crop(0, 143, 401, 143);
 
         //Weapons
         bow_arrow_right[0] = cavemanRight.crop(0, height*11, width, height);
@@ -111,31 +121,62 @@ public class Assets {
         player_throw_right[0] = cavemanRight.crop(width, height*11, width, height);
 
         //Animals
-        fox_up[0] = foxSheet.crop(0, foxHeight *3, foxWidth, foxHeight);
-        fox_up[1] = foxSheet.crop(foxWidth, foxHeight *3, foxWidth, foxHeight);
-        fox_up[2] = foxSheet.crop(foxWidth *2, foxHeight *3, foxWidth, foxHeight);
+        fox_up[0] = foxSheet.crop(0, animalHeight *3, animalWidth, animalHeight);
+        fox_up[1] = foxSheet.crop(animalWidth, animalHeight *3, animalWidth, animalHeight);
+        fox_up[2] = foxSheet.crop(animalWidth *2, animalHeight *3, animalWidth, animalHeight);
 
-        fox_down[0] = foxSheet.crop(0, 0, foxWidth, foxHeight);
-        fox_down[1] = foxSheet.crop(foxWidth, 0, foxWidth, foxHeight);
-        fox_down[2] = foxSheet.crop(foxWidth *2, 0, foxWidth, foxHeight);
+        fox_down[0] = foxSheet.crop(0, 0, animalWidth, animalHeight);
+        fox_down[1] = foxSheet.crop(animalWidth, 0, animalWidth, animalHeight);
+        fox_down[2] = foxSheet.crop(animalWidth *2, 0, animalWidth, animalHeight);
 
-        fox_left[0] = foxSheet.crop(0, foxHeight, foxWidth, foxHeight);
-        fox_left[1] = foxSheet.crop(foxWidth, foxHeight, foxWidth, foxHeight);
-        fox_left[2] = foxSheet.crop(foxWidth *2, foxHeight, foxWidth, foxHeight);
+        fox_left[0] = foxSheet.crop(0, animalHeight, animalWidth, animalHeight);
+        fox_left[1] = foxSheet.crop(animalWidth, animalHeight, animalWidth, animalHeight);
+        fox_left[2] = foxSheet.crop(animalWidth *2, animalHeight, animalWidth, animalHeight);
 
-        fox_right[0] = foxSheet.crop(0, foxHeight *2, foxWidth, foxHeight);
-        fox_right[1] = foxSheet.crop(foxWidth, foxHeight *2, foxWidth, foxHeight);
-        fox_right[2] = foxSheet.crop(foxWidth *2, foxHeight *2, foxWidth, foxHeight);
+        fox_right[0] = foxSheet.crop(0, animalHeight *2, animalWidth, animalHeight);
+        fox_right[1] = foxSheet.crop(animalWidth, animalHeight *2, animalWidth, animalHeight);
+        fox_right[2] = foxSheet.crop(animalWidth *2, animalHeight *2, animalWidth, animalHeight);
+
+        tiger_up[0] = tigerSheet.crop(0, animalHeight *3, animalWidth, animalHeight);
+        tiger_up[1] = tigerSheet.crop(animalWidth, animalHeight *3, animalWidth, animalHeight);
+        tiger_up[2] = tigerSheet.crop(animalWidth *2, animalHeight *3, animalWidth, animalHeight);
+
+        tiger_down[0] = tigerSheet.crop(0, 0, animalWidth, animalHeight);
+        tiger_down[1] = tigerSheet.crop(animalWidth, 0, animalWidth, animalHeight);
+        tiger_down[2] = tigerSheet.crop(animalWidth *2, 0, animalWidth, animalHeight);
+
+        tiger_left[0] = tigerSheet.crop(0, animalHeight, animalWidth, animalHeight);
+        tiger_left[1] = tigerSheet.crop(animalWidth, animalHeight, animalWidth, animalHeight);
+        tiger_left[2] = tigerSheet.crop(animalWidth *2, animalHeight, animalWidth, animalHeight);
+
+        tiger_right[0] = tigerSheet.crop(0, animalHeight *2, animalWidth, animalHeight);
+        tiger_right[1] = tigerSheet.crop(animalWidth, animalHeight *2, animalWidth, animalHeight);
+        tiger_right[2] = tigerSheet.crop(animalWidth *2, animalHeight *2, animalWidth, animalHeight);
 
 
-        //Non-Creatures
-        dirt = sheet.crop(width, 0, width, height);
-        grass = sheet.crop(width*2, 0, width, height);
-        rock = sheet.crop(width*3, 0, width, height);
-        tree = sheet.crop(width*5, 0, width*2, height*3);
+        //Items
         spear = sheet.crop(width*3, height, width, height); //Not finalised sprite
-        arrow = sheet.crop(0, height*2, width*3, height*2); //Not finalised sprite
+        arrow = sheet.crop(0, height*2, width, height); //Not finalised sprite
         wood = sheet.crop(width*3, height*2, width, height);
         meat = sheet.crop(width*4, 0, width, height);
+        tree = sheet.crop(width*5, 0, width*2, height*3);
+
+        //Water animation
+        water[0] = sheet.crop(0, height*3, width, height);
+        water[1] = sheet.crop(width, height*3, width, height);
+        waterfall[0] = sheet.crop(width*2, height*3, width, height);
+        waterfall[1] = sheet.crop(width*3, height*3, width, height);
+        waterSplash[0] = sheet.crop(width*4, height*3, width, height);
+        waterSplash[1] = sheet.crop(width*5, height*3, width, height);
+        waterShadow[0] = sheet.crop(width*6, height*3, width, height);
+        waterShadow[1] = sheet.crop(width*7, height*3, width, height);
+
+        //Tiles
+        dirt[0] = sheet.crop(width, 0, width, height);
+        grass[0] = sheet.crop(width*2, 0, width, height);
+        rock[0] = sheet.crop(width*3, 0, width, height);
+        platform[0] = sheet.crop(0, height*4, width, height);
+
+
     }
 }

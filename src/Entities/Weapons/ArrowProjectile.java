@@ -1,6 +1,7 @@
 package Entities.Weapons;
 
-import Entities.Creatures.AnimalTest;
+import Entities.Creatures.Fox;
+import Entities.Creatures.Tiger;
 import Entities.Entity;
 import Entities.Static.Tree;
 import TileGame.Handler;
@@ -58,8 +59,13 @@ public class ArrowProjectile extends Projectile {
                 die();
                 return;
             }
-            if(e.getCollisionBounds(0f, 0f).intersects(mRect) && e instanceof AnimalTest) {
+            if(e.getCollisionBounds(0f, 0f).intersects(mRect) && e instanceof Fox) {
                 e.damageFox(damage);
+                die();
+                return;
+            }
+            if(e.getCollisionBounds(0f, 0f).intersects(mRect) && e instanceof Tiger) {
+                e.damageTiger(damage);
                 die();
                 return;
             }
@@ -75,7 +81,7 @@ public class ArrowProjectile extends Projectile {
     @Override
     public void render(Graphics2D g) {
         g.rotate(angle, x-handler.getGameCamera().getxOffset(), y-handler.getGameCamera().getyOffset());
-        g.drawImage(Assets.arrow, (int) (x - handler.getGameCamera().getxOffset()) + 5, (int) (y - handler.getGameCamera().getyOffset()) - 5, (width / 2) + 12, (height / 2) + 12, null);
+        g.drawImage(Assets.arrow, (int) (x - handler.getGameCamera().getxOffset()) + 5, (int) (y - handler.getGameCamera().getyOffset()) - 5, width/2, height/2, null);
         g.rotate(-angle, x-handler.getGameCamera().getxOffset(), y-handler.getGameCamera().getyOffset());
         /*g.setColor(Color.red);
         g.fillRect((int)(x + collider.x - handler.getGameCamera().getxOffset()), (int)(y + collider.y - handler.getGameCamera().getyOffset()),

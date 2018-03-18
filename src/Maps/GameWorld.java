@@ -1,17 +1,20 @@
 package Maps;
 
-import Entities.Creatures.AnimalTest;
+import Audio.AudioPlayer;
+import Entities.Creatures.Fox;
 import Entities.Creatures.Player;
-import Entities.Entity;
+import Entities.Creatures.Tiger;
 import Entities.EntityManager;
 import Entities.Static.Tree;
 import Entities.Weapons.Projectile;
+import Inventory.Inventory;
 import Inventory.Items.ItemManager;
 import TileGame.Handler;
-import Tiles.Tile;
+import Tiles.*;
 import Utilities.LoadFile;
 
 import java.awt.*;
+import java.util.Random;
 
 public class GameWorld {
 
@@ -19,25 +22,45 @@ public class GameWorld {
     private int width, height;
     private int spawnX, spawnY;
     private int[][] tiles;
+    private int numOfFoxes = 5;
+    private int numOfTrees = 15;
 
     private EntityManager entityManager;
+    public Inventory inventory;
     private ItemManager itemManager;
+    private WaterSplashTile waterSplashTile;
+    private AudioPlayer waterSplashSFX;
+
+    private Random random = new Random();
 
     public GameWorld(Handler handler, String path) {
         this.handler = handler;
         entityManager = new EntityManager(handler, new Player(handler, 0, 0));
-        entityManager.addEntity(new AnimalTest(handler, 40, 20));
-        entityManager.addEntity(new AnimalTest(handler, 60, 40));
-        entityManager.addEntity(new AnimalTest(handler, 10, 60));
-        entityManager.addEntity(new AnimalTest(handler, 20, 50));
+        waterSplashTile = new WaterSplashTile(5);
+        waterSplashSFX = new AudioPlayer("/SFX/waterfall.mp3");
+
+        //Spawn Foxes
+        for (int i = 0; i < numOfFoxes; i++){
+            entityManager.addEntity(new Fox(handler, random.nextInt(Tile.TILE_WIDTH*17 - Tile.TILE_WIDTH + 1) + Tile.TILE_WIDTH,
+                    random.nextInt(Tile.TILE_HEIGHT*16 - Tile.TILE_HEIGHT*2 + 1) + Tile.TILE_HEIGHT*2));
+
+        }
+
+        entityManager.addEntity(new Tiger(handler, Tile.TILE_WIDTH*30, 500));
+        //entityManager.addEntity(new Fox(handler, Tile.TILE_WIDTH, Tile.TILE_HEIGHT));
 
         itemManager = new ItemManager(handler);
 
-        entityManager.addEntity(new Tree(handler, 450, 200));
-        entityManager.addEntity(new Tree(handler, 500, 500));
-        entityManager.addEntity(new Tree(handler, 900, 900));
-        entityManager.addEntity(new Tree(handler, 850, 200));
-        entityManager.addEntity(new Tree(handler, 1000, 350));
+        //Spawn Trees
+        for (int i = 0; i < numOfTrees; i++) {
+            entityManager.addEntity(new Tree(handler, random.nextInt(Tile.TILE_WIDTH*17 - Tile.TILE_WIDTH) + 1 + Tile.TILE_WIDTH,
+                    random.nextInt(Tile.TILE_HEIGHT*36 - Tile.TILE_HEIGHT*2 + 1) + Tile.TILE_HEIGHT*2));
+        }
+
+        for (int i = 0; i < numOfTrees; i++) {
+            entityManager.addEntity(new Tree(handler, random.nextInt(Tile.TILE_WIDTH*36 - Tile.TILE_WIDTH*19) + 1 + Tile.TILE_WIDTH*21,
+                    random.nextInt(Tile.TILE_HEIGHT*36 - Tile.TILE_HEIGHT*2 + 1) + Tile.TILE_HEIGHT*2));
+        }
 
         loadWorld(path);
 
@@ -48,6 +71,17 @@ public class GameWorld {
     public void update() {
         itemManager.update();
         entityManager.update();
+
+        int xStart = (int) Math.max(0, handler.getGameCamera().getxOffset() / Tile.TILE_WIDTH);
+        int xEnd = (int) Math.min(width, (handler.getGameCamera().getxOffset() + handler.getWidth()) / Tile.TILE_WIDTH + 1);
+        int yStart = (int) Math.max(0, handler.getGameCamera().getyOffset() / Tile.TILE_HEIGHT);
+        int yEnd = (int) Math.min(height, (handler.getGameCamera().getyOffset() + handler.getHeight()) / Tile.TILE_HEIGHT + 1);
+
+        for (int x = xStart; x < xEnd; x++) {
+            for (int y = yStart; y < yEnd; y++) {
+                getTile(x, y).update();
+            }
+        }
     }
 
     public void render(Graphics2D g) {
@@ -63,6 +97,7 @@ public class GameWorld {
                         (int) (y * Tile.TILE_HEIGHT - handler.getGameCamera().getyOffset()));
             }
         }
+
         itemManager.render(g);
         entityManager.render(g);
     }
@@ -80,6 +115,7 @@ public class GameWorld {
         if (tile == null){
             return Tile.dirtTile;
         }
+
         return tile;
     }
 
@@ -94,9 +130,6 @@ public class GameWorld {
         }
         return solid;
     }
-
-
-
 
     private void loadWorld(String path) {
         String file = LoadFile.loadFile(path);
@@ -128,5 +161,13 @@ public class GameWorld {
     }
     public Handler getHandler() {
         return handler;
+    }
+    public Player getPlayer(){
+        for (int i = 0; i < getEntityManager().getEntities().size(); i++){
+            if (getEntityManager().getEntities().get(i) instanceof Player){
+                return (Player) getEntityManager().getEntities().get(i);
+            }
+        }
+        return null;
     }
 }

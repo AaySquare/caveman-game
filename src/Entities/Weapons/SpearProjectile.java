@@ -1,6 +1,7 @@
 package Entities.Weapons;
 
-import Entities.Creatures.AnimalTest;
+import Entities.Creatures.Fox;
+import Entities.Creatures.Tiger;
 import Entities.Entity;
 import Entities.Static.Tree;
 import TileGame.Handler;
@@ -11,7 +12,7 @@ import java.awt.*;
 public class SpearProjectile extends Projectile {
 
     public static final int SPEAR_FIRE_RATE = 100;
-    public static int numberOfSpears = 3;
+    public static int numberOfSpears = 5;
 
     public SpearProjectile(Handler handler, float x, float y, int width, int height) {
         super(handler, x, y, width, height);
@@ -40,8 +41,13 @@ public class SpearProjectile extends Projectile {
                 die();
                 return;
             }
-            if(e.getCollisionBounds(0f, 0f).intersects(mRect) && e instanceof AnimalTest) {
+            if(e.getCollisionBounds(0f, 0f).intersects(mRect) && e instanceof Fox) {
                 e.damageFox(damage);
+                die();
+                return;
+            }
+            if(e.getCollisionBounds(0f, 0f).intersects(mRect) && e instanceof Tiger) {
+                e.damageTiger(damage);
                 die();
                 return;
             }

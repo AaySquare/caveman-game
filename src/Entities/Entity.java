@@ -1,5 +1,7 @@
 package Entities;
 
+import Entities.Creatures.Player;
+import Entities.Creatures.Tiger;
 import Inputs.Mouse;
 import TileGame.Handler;
 
@@ -7,8 +9,18 @@ import java.awt.*;
 
 public abstract class Entity {
 
-    protected int treeHealth = 20;
-    protected int foxHealth = 50;
+    protected final int MAX_TREE_HEALTH = 30;
+    protected int treeHealth = MAX_TREE_HEALTH;
+
+    protected final int MAX_FOX_HEALTH = 40;
+    protected int foxHealth = MAX_FOX_HEALTH;
+
+    protected final int MAX_TIGER_HEALTH = 200;
+    protected int tigerHealth = MAX_TIGER_HEALTH;
+
+    protected final int MAX_PLAYER_HEALTH = 100;
+    protected int playerHealth = MAX_PLAYER_HEALTH;
+
     protected Handler handler;
     protected float x, y;
     protected double direction;
@@ -36,7 +48,6 @@ public abstract class Entity {
 
     public void damageTree(int amount){
         treeHealth -= amount;
-        System.out.println("Health: " + treeHealth);
         if (treeHealth <= 0){
             die();
             remove();
@@ -45,8 +56,23 @@ public abstract class Entity {
 
     public void damageFox(int amount){
         foxHealth -= amount;
-        System.out.println("Health: " + foxHealth);
         if (foxHealth <= 0){
+            die();
+            remove();
+        }
+    }
+
+    public void damageTiger(int amount){
+        tigerHealth -= amount;
+        if (tigerHealth <= 0){
+            die();
+            remove();
+        }
+    }
+
+    public void damagePlayer(int amount){
+        playerHealth -= amount;
+        if (playerHealth <= 0){
             die();
             remove();
         }
@@ -56,6 +82,7 @@ public abstract class Entity {
         for(Entity e : handler.getGameWorld().getEntityManager().getEntities()){
             if(e.equals(this))
                 continue;
+
             if(e.getCollisionBounds(0f, 0f).intersects(getCollisionBounds(xOffset, yOffset)))
                 return true;
         }

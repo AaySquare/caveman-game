@@ -1,19 +1,27 @@
 package TileGame;
 
+import Audio.AudioPlayer;
 import Display.Display;
+import Entities.Creatures.Player;
 import Inputs.KeyController;
 import Inputs.Mouse;
-import Maps.GameWorld;
 import States.GameState;
 import States.MenuState;
 import States.State;
+import UI.UIManager;
 import gfx.Camera;
 
+import javax.sound.sampled.Clip;
+import javax.swing.*;
+import java.applet.Applet;
 import java.awt.*;
 import java.awt.image.BufferStrategy;
 
 import static Entities.Weapons.SpearProjectile.numberOfSpears;
 import static Entities.Weapons.ArrowProjectile.numberOfArrows;
+import static Entities.Creatures.Player.playerDead;
+import static Entities.Creatures.Tiger.tigerDead;
+import static States.MenuState.game_state;
 
 public class Game implements Runnable {
 
@@ -28,15 +36,15 @@ public class Game implements Runnable {
     private Graphics g;
 
     //States
-    private State gameState;
-    private State menuState;
+    public State gameState;
+    public State menuState;
 
     private KeyController keyController;
     private Mouse mouse;
-
     private Camera gameCamera;
-
     private Handler handler;
+    private static UIManager uiManager;
+    private Player player;
 
     public Game(String title, int width, int height){
         this.width = width;
@@ -51,6 +59,7 @@ public class Game implements Runnable {
         display.getFrame().addKeyListener(keyController);
         display.getFrame().addMouseListener(mouse);
         display.getFrame().addMouseMotionListener(mouse);
+
         display.getCanvas().addMouseListener(mouse);
         display.getCanvas().addMouseMotionListener(mouse);
         gfx.Assets.init();
@@ -61,8 +70,7 @@ public class Game implements Runnable {
 
         gameState = new GameState(handler);
         menuState = new MenuState(handler);
-        State.setState(gameState);
-
+        State.setState(menuState);
     }
 
     public void update(){
@@ -78,6 +86,7 @@ public class Game implements Runnable {
             display.getCanvas().createBufferStrategy(3);
             return;
         }
+
         g = bs.getDrawGraphics();
         g.clearRect(0, 0, width, height);
 
@@ -85,11 +94,33 @@ public class Game implements Runnable {
             State.getState().render((Graphics2D) g);
         }
 
-        g.setColor(Color.white);
-        g.setFont(new Font("Calibri", 0, 20));
-        //g.fillRect(Mouse.getMouseX() - 32, Mouse.getMouseY() - 32, 64, 64);
-        g.drawString("Spears count: " + numberOfSpears, 0, 50);
-        g.drawString("Arrows count: " + numberOfArrows, 0, 80);
+        if (game_state){
+            g.setColor(Color.white);
+            g.setFont(new Font("Calibri", 0, 20));
+            g.drawString("Spears: " + numberOfSpears, 0, 50);
+            g.drawString("Arrows: " + numberOfArrows, 0, 80);
+
+            if (playerDead){
+                g.setColor(Color.red);
+                g.setFont(new Font("Comic Sans MS", 0, 70));
+                g.drawString("You Lose!", 200, 330);
+            }
+            else if (tigerDead){
+                g.setColor(Color.green);
+                g.setFont(new Font("Comic Sans MS", 0, 70));
+                g.drawString("You Win!", 200, 330);
+            }
+        }
+
+        else {
+            g.setColor(Color.black);
+            g.setFont(new Font("Comic Sans MS", Font.BOLD + Font.ITALIC, 30));
+            g.drawString("CAVEMAN VS ANIMALS", 170, 50);
+
+            g.setColor(Color.black);
+            g.setFont(new Font("Comic Sans MS", Font.ITALIC, 18));
+            g.drawString("Created by Aayush Mathur", 250, 550);
+        }
 
         bs.show();
         g.dispose();
@@ -145,6 +176,10 @@ public class Game implements Runnable {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+    }
+
+    public static UIManager getUimanager() {
+        return uiManager;
     }
 
     public KeyController getKeyController() {

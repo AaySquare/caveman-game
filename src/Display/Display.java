@@ -30,6 +30,7 @@ public class Display {
         canvas.setMaximumSize(new Dimension(width, height));
         canvas.setMinimumSize(new Dimension(width, height));
         canvas.setFocusable(false);
+        frame.getContentPane().setBackground(Color.green);
 
         frame.add(canvas);
         frame.pack();

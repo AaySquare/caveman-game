@@ -1,6 +1,7 @@
 package TileGame;
 
 import Inputs.KeyController;
+import Inputs.Mouse;
 import Maps.GameWorld;
 import gfx.Camera;
 
@@ -31,6 +32,10 @@ public class Handler {
 
     public KeyController getKeyController(){
         return game.getKeyController();
+    }
+
+    public Mouse getMouse(){
+        return game.getMouse();
     }
 
     public void setGame(Game game) {
