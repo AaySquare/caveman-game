@@ -4,7 +4,7 @@ import Inventory.Items.Item;
 
 public class ItemStack {
 
-    private int amount;
+    public static int amount;
     private Item item;
 
     public ItemStack(Item item, int amount){

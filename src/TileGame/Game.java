@@ -1,6 +1,5 @@
 package TileGame;
 
-import Audio.AudioPlayer;
 import Display.Display;
 import Entities.Creatures.Player;
 import Inputs.KeyController;
@@ -11,9 +10,6 @@ import States.State;
 import UI.UIManager;
 import gfx.Camera;
 
-import javax.sound.sampled.Clip;
-import javax.swing.*;
-import java.applet.Applet;
 import java.awt.*;
 import java.awt.image.BufferStrategy;
 
@@ -21,7 +17,9 @@ import static Entities.Weapons.SpearProjectile.numberOfSpears;
 import static Entities.Weapons.ArrowProjectile.numberOfArrows;
 import static Entities.Creatures.Player.playerDead;
 import static Entities.Creatures.Tiger.tigerDead;
+import static Inventory.Items.ItemManager.canCraft;
 import static States.MenuState.game_state;
+import static Inventory.ItemStack.amount;
 
 public class Game implements Runnable {
 
@@ -96,9 +94,17 @@ public class Game implements Runnable {
 
         if (game_state){
             g.setColor(Color.white);
-            g.setFont(new Font("Calibri", 0, 20));
+            g.setFont(new Font("Comic Sans MS", 0, 20));
             g.drawString("Spears: " + numberOfSpears, 0, 50);
             g.drawString("Arrows: " + numberOfArrows, 0, 80);
+            if (amount > 0 && canCraft){
+                g.drawString("Craft Arrow (A): ", 120, 80);
+            }
+            if (amount > 1 && canCraft){
+                g.drawString("Craft Spear (S): ", 120, 50);
+            }
+
+            g.drawString("Objective: Find the Tiger and kill it.", 350, 30);
 
             if (playerDead){
                 g.setColor(Color.red);
@@ -116,10 +122,21 @@ public class Game implements Runnable {
             g.setColor(Color.black);
             g.setFont(new Font("Comic Sans MS", Font.BOLD + Font.ITALIC, 30));
             g.drawString("CAVEMAN VS ANIMALS", 170, 50);
+            g.setFont(new Font("Comic Sans MS", Font.ITALIC, 25));
+            g.drawString("A Tile-Based RPG", 250, 90);
 
-            g.setColor(Color.black);
+            g.setFont(new Font("Comic Sans MS", Font.BOLD, 17));
+            g.drawString("CONTROLS", 300, 300);
+            g.setFont(new Font("Comic Sans MS", 0, 17));
+            g.drawString("Move -> Arrow Keys", 240, 330);
+            g.drawString("Aim -> Mouse Pointer", 240, 360);
+            g.drawString("Throw Spears -> Left Mouse Button", 240, 390);
+            g.drawString("Shoot Arrows -> Right Mouse Button", 240, 420);
+            g.drawString("Melee Attack -> Middle Mouse Button", 240, 450);
+            g.drawString("Inventory -> 'I' Button", 240, 480);
+
             g.setFont(new Font("Comic Sans MS", Font.ITALIC, 18));
-            g.drawString("Created by Aayush Mathur", 250, 550);
+            g.drawString("Created by Aayush Mathur", 250, 570);
         }
 
         bs.show();

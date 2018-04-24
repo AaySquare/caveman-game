@@ -3,12 +3,19 @@ package Inputs;
 import java.awt.event.KeyEvent;
 import java.awt.event.KeyListener;
 import Inventory.Inventory;
+import TileGame.Handler;
+
+import static Entities.Weapons.ArrowProjectile.numberOfArrows;
+import static Entities.Weapons.SpearProjectile.numberOfSpears;
+import static Inventory.ItemStack.amount;
+import static Inventory.Items.ItemManager.canCraft;
 
 public class KeyController implements KeyListener{
 
     private boolean[] keys, justPressed, cantPress;
     public boolean up, left, down, right;
     public boolean meleeButton;
+    private Handler handler;
 
     public KeyController(){
         keys = new boolean[256];
@@ -60,6 +67,28 @@ public class KeyController implements KeyListener{
                 Inventory.isOpen = true;
             } else {
                 Inventory.isOpen = false;
+            }
+        }
+
+        if (canCraft){
+            if (amount > 0) {
+                if (amount == 0){
+                    return;
+                }
+                if(e.getKeyCode() == KeyEvent.VK_A) {
+                    numberOfArrows += 1;
+                    amount = amount - 1;
+                }
+            }
+
+            if (amount > 1){
+                if (amount == 0){
+                    return;
+                }
+                if(e.getKeyCode() == KeyEvent.VK_S) {
+                    numberOfSpears += 1;
+                    amount = amount - 2;
+                }
             }
         }
     }

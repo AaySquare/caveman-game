@@ -15,7 +15,7 @@ public class Assets {
             //Tiger movement sprites
             tiger_down, tiger_up, tiger_left, tiger_right,
             //Tiles animaion
-            dirt, grass, rock, water, waterfall, waterSplash, waterShadow, platform,
+            dirt, grass, rock, water, waterfall, waterSplash, waterShadow, platform, cave,
             //UI
             start_button;
 
@@ -63,6 +63,7 @@ public class Assets {
         dirt = new BufferedImage[1];
         rock = new BufferedImage[1];
         platform = new BufferedImage[1];
+        cave = new BufferedImage[1];
 
         start_button = new BufferedImage[2];
 
@@ -176,7 +177,6 @@ public class Assets {
         grass[0] = sheet.crop(width*2, 0, width, height);
         rock[0] = sheet.crop(width*3, 0, width, height);
         platform[0] = sheet.crop(0, height*4, width, height);
-
-
+        cave[0] = sheet.crop(width, height*4, width+18, height+7);
     }
 }

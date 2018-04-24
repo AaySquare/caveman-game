@@ -1,7 +1,5 @@
 package Entities;
 
-import Entities.Creatures.Player;
-import Entities.Creatures.Tiger;
 import Inputs.Mouse;
 import TileGame.Handler;
 
@@ -9,17 +7,14 @@ import java.awt.*;
 
 public abstract class Entity {
 
-    protected final int MAX_TREE_HEALTH = 30;
+    protected final int MAX_TREE_HEALTH = 20;
     protected int treeHealth = MAX_TREE_HEALTH;
 
     protected final int MAX_FOX_HEALTH = 40;
     protected int foxHealth = MAX_FOX_HEALTH;
 
-    protected final int MAX_TIGER_HEALTH = 200;
+    protected final int MAX_TIGER_HEALTH = 230;
     protected int tigerHealth = MAX_TIGER_HEALTH;
-
-    protected final int MAX_PLAYER_HEALTH = 100;
-    protected int playerHealth = MAX_PLAYER_HEALTH;
 
     protected Handler handler;
     protected float x, y;
@@ -71,8 +66,8 @@ public abstract class Entity {
     }
 
     public void damagePlayer(int amount){
-        playerHealth -= amount;
-        if (playerHealth <= 0){
+        handler.getGameWorld().getPlayer().playerHealth -= amount;
+        if (handler.getGameWorld().getPlayer().playerHealth <= 0){
             die();
             remove();
         }

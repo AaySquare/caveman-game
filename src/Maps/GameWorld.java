@@ -22,13 +22,12 @@ public class GameWorld {
     private int width, height;
     private int spawnX, spawnY;
     private int[][] tiles;
-    private int numOfFoxes = 5;
-    private int numOfTrees = 15;
+    private int numOfFoxes = 10;
+    private int numOfTrees = 30;
 
     private EntityManager entityManager;
     public Inventory inventory;
     private ItemManager itemManager;
-    private WaterSplashTile waterSplashTile;
     private AudioPlayer waterSplashSFX;
 
     private Random random = new Random();
@@ -36,7 +35,6 @@ public class GameWorld {
     public GameWorld(Handler handler, String path) {
         this.handler = handler;
         entityManager = new EntityManager(handler, new Player(handler, 0, 0));
-        waterSplashTile = new WaterSplashTile(5);
         waterSplashSFX = new AudioPlayer("/SFX/waterfall.mp3");
 
         //Spawn Foxes

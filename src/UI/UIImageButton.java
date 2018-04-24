@@ -20,9 +20,9 @@ public class UIImageButton extends UIObject{
     @Override
     public void render(Graphics g) {
         if(hovering)
-            g.drawImage(images[1], (int) x+30, (int) y+20, width*2, height*2, null);
+            g.drawImage(images[1], (int) x+30, (int) y-80, width*2, height*2, null);
         else
-            g.drawImage(images[0], (int) x+30, (int) y+20, width*2, height*2, null);
+            g.drawImage(images[0], (int) x+30, (int) y-80, width*2, height*2, null);
     }
 
     @Override

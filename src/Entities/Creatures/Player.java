@@ -30,9 +30,12 @@ public class Player extends Creature {
     public static Boolean playerDead = false;
 
     private long lastAttackTimer, attackCooldown = 750, attackTimer = attackCooldown;
-    private int meleeDamage = 5;
+    private int     meleeDamage = 5;
     private int fireRate_spear;
     private int fireRate_arrow;
+
+    public final int MAX_PLAYER_HEALTH = 100;
+    public int playerHealth = MAX_PLAYER_HEALTH;
 
     private Inventory inventory;
     private AudioPlayer meleeSound;
@@ -103,6 +106,10 @@ public class Player extends Creature {
     }
 
     private void meleeAttack(){
+        if (Inventory.isOpen || tigerDead || playerDead) {
+            return;
+        }
+
         attackTimer += System.currentTimeMillis()  - lastAttackTimer;
         lastAttackTimer = System.currentTimeMillis();
         if (attackTimer < attackCooldown){
@@ -142,7 +149,7 @@ public class Player extends Creature {
     }
 
     private void updateShoot(){
-        if (Inventory.isOpen){
+        if (Inventory.isOpen || tigerDead || playerDead) {
             return;
         }
 
@@ -162,7 +169,7 @@ public class Player extends Creature {
         xMove = 0;
         yMove = 0;
 
-       if (Inventory.isOpen || tigerDead) {
+       if (Inventory.isOpen || tigerDead || playerDead) {
            return;
        }
 
@@ -219,7 +226,6 @@ public class Player extends Creature {
     @Override
     public void die() {
         playerDead = true;
-        System.out.println("You lose!");
     }
 
     public Inventory getInventory() {
@@ -227,6 +233,7 @@ public class Player extends Creature {
     }
 
     private BufferedImage getAnimationFrame(){
+
         if (xMove < 0){
             curPosition = Assets.player_idle_left[0];
             if ((handler.getKeyController().meleeButton || Mouse.getMouseB() == 2)){

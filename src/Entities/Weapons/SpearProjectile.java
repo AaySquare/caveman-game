@@ -18,7 +18,7 @@ public class SpearProjectile extends Projectile {
         super(handler, x, y, width, height);
         range = 300;
         speed = 5;
-        damage = 50;
+        damage = 40;
 
         xMove = speed*Math.cos(angle);
         yMove = speed*Math.sin(angle);

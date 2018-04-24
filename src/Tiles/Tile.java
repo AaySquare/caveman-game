@@ -17,6 +17,7 @@ public abstract class Tile {
     public static Tile wateSplashTile = new WaterSplashTile(5);
     public static Tile platformTile = new PlatformTile(6);
     public static Tile shadowTile = new ShadowOnWaterTile(7);
+    public static Tile caveTile = new CaveTile(8);
     public static final int TILE_WIDTH = 64, TILE_HEIGHT = 64;
 
     protected BufferedImage[] texture;
